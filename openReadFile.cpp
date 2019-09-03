@@ -41,3 +41,25 @@ int main () {
 
   return 0;
 }
+
+// convert numbers from fil to matrix
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+using namespace std;
+
+int main(int argc, char* argv[]) {
+	ifstream in("example.txt");
+	int readNumber;
+
+	vector <int> numberVector;
+
+	while (in >> readNumber)
+	{
+		numberVector.push_back(readNumber);
+	}
+
+
+	return 0;
+}
