@@ -1,21 +1,18 @@
 #include <iostream>
 #include <cmath>
-#include <math.h>
 #include <iomanip>
 #include <string>
-#include "time.h"
 #include <fstream>
 
-
+#include <ctime>
+#include <ratio>
+#include <chrono>
 
 using namespace std;
 ofstream ofile;
 
 inline double f(double x) { return 100.0 * exp(-10.0 * x); };
-inline double exact(double x)
-{
-	return 1.0 - (1 - exp(-10)) * x - exp(-10 * x);
-}
+inline double exact(double x) { return (1.0 - (1 - exp(-10)) * x - exp(-10 * x)); }
 void gauss_generel(int n, double* a, double* b, double* c, double* u, double* s);
 void gauss_special(int n, double* b, double* u, double* s);
 double relativError(double nummerical, double exact);
@@ -40,13 +37,15 @@ int main(int argc, char* argv[]) {
 		string argument = to_string(i);
 		fileout.append(argument);
 
-		double h = 1.0 / n; //stepzise
+		double h = 1.0 / (n+1); //stepzise
 		int n1 = n + 1; int n2 = n + 2;
 		double* a = new double[n1];
 		double* b = new double[n2];
 		double* c = new double[n1];
 		double* u = new double[n2];
 		double* s = new double[n2];
+		double* error = new double[n2];
+
 
 		//defining the values of elemens
 		for (int i = 0; i < n + 2; i++) {
@@ -55,45 +54,55 @@ int main(int argc, char* argv[]) {
 			c[i] = -1.0;
 			s[i] = h * h * f(h * i);
 		}
-		u[0] = u[n2] = 0.0; //boundary condition
+		u[0] = u[n1] = 0.0; //boundary condition
 		b[n2] = 2.0;
 
-		//couting the time
-		clock_t start, finish;
+		//couting the time using chrono
 
+		using namespace std::chrono;
 		if (test == 0) {
-			start = clock();
+			high_resolution_clock::time_point t1 = high_resolution_clock::now();
 			gauss_generel(n, a, b, c, u, s);
-			finish = clock();
-			double timeSpent = (double(finish - start) / CLOCKS_PER_SEC);
-			cout << "Time for generel: " << scientific << timeSpent << setprecision(10) << " s med n = " << n << endl;
+			high_resolution_clock::time_point t2 = high_resolution_clock::now();
+			duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+
+			cout << "Time for generel: " << time_span.count() << " s med n = " << n << endl;
 
 		}
 		else if (test == 1) {
-			start = clock();
+			high_resolution_clock::time_point t1 = high_resolution_clock::now();
 			gauss_special(n, b, u, s);
-			finish = clock();
-			double timeSpent = (double(finish - start) / CLOCKS_PER_SEC);
-			cout << "Time for special: " << scientific << timeSpent << setprecision(10) << " s med n = " << n << endl;
+			high_resolution_clock::time_point t2 = high_resolution_clock::now();
+			duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+			cout << "Time for special: " << time_span.count() << " s med n = " << n << endl;
+		}
+		else {
+			cout << "Error: second argv not valid." << endl;
 		}
 
 		//finner den relative feilen:
-		double* error = new double[n2];
-		for (int i = 1; i < n2; i++) {
-			error[i] = relativError(u[i], exact(h * i));
+		error[0] = 0.0;
+		error[n1] = 0.0;
+		double max_error = error[0];
+		for (int i = 1; i < n1; i++){
+			error[i] = relativError(u[i], exact(h*i));
+			if (error[i] >= abs(max_error)) {
+				max_error = error[i];
+			}
 		}
+		/*
 		//writing to files
 		ofile.open(fileout);
 		ofile << setiosflags(ios::showpoint | ios::uppercase);
+		//sender error: log10(h) --- log10(error)
+		ofile << setprecision(12) << left << setw(25) << log10(h)
+			<< left << setw(25) <<  log10(max_error)
+			<< endl;
 		for (int z = 1; z < n; z++) {
-			ofile <<  setprecision(8) << left << setw(20) << u[z]
-					<< left << setw(20) << exact(h * z)
-					<< left << setw(20) << error[z] << endl;
+			//ofile << setw(15) << setprecision(8) << u[z] <<endl;
 		}
 		ofile.close();
-		delete[] u;
-
-
+		delete[] u; */
 	}
 	return 0;
 }
@@ -104,8 +113,8 @@ void gauss_generel(int n, double* a, double* b, double* c, double* u, double* s)
 		b[i] = b[i] - ((a[i - 1] * c[i - 1]) / b[i - 1]);
 		s[i] = s[i] - ((s[i - 1] * a[i - 1]) / b[i - 1]);
 	}
-	u[n + 1] = s[n + 1] / b[n + 1];
-	for (int i = n + 1; i > 1; i--)
+	//u[n] = s[n] / b[n];
+	for (int i = n+1; i > 1; i--)
 	{
 		//u[i] = (s[i] - c[i] * u[i + 1]) / b[i];
 		u[i - 1] = (s[i - 1] - c[i - 1] * u[i]) / b[i - 1];
@@ -114,9 +123,10 @@ void gauss_generel(int n, double* a, double* b, double* c, double* u, double* s)
 void gauss_special(int n, double* b, double* u, double* s)
 {
 	for (int i = 2; i < n + 1; i++) {
-		b[i] = (i + 1.0) / (i);
+		b[i] = (((double)i) + 1.0) / ((double)i);
 		s[i] = s[i] + (s[i - 1] / b[i - 1]);
 	}
+	u[n + 1] = s[n + 1] / b[n + 1];
 	for (int i = n + 1; i > 1; i--)
 	{
 		//u[i] = (s[i] + u[i + 1])/ b[i];
@@ -126,7 +136,7 @@ void gauss_special(int n, double* b, double* u, double* s)
 }
 double relativError(double nummerical, double exact){
 	double r;
-	double epslon = 1e-6;
+	double epslon = 1e-10;
 	if (exact <= epslon) {
 		r = 0;
 	}
