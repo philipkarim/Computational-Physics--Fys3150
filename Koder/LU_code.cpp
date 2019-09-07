@@ -3,11 +3,12 @@
 #include <iostream>
 #include <cmath>
 #include <iomanip>
+#include <fstream>
+#include <armadillo>
+//bruker for å beregne tid
 #include <ctime>
 #include <ratio>
 #include <chrono>
-#include <armadillo>
-#include <fstream>
 
 
 using namespace std;
@@ -22,9 +23,7 @@ double relativError(double nummerical, double exact);
 
 
 int main(int argc, char* argv[]) {
-	int ex; int test;
-	string filename;
-
+	int ex;
 	if (argc <= 1) {
 		cout << "Bad Usage: you forgot to enter values." << endl;
 		exit(1);
@@ -35,11 +34,14 @@ int main(int argc, char* argv[]) {
 
 	int n = (int)pow(10.0, ex);
 	double h = 1.0 / (n + 1);
+	//definerer vektorene
 	vec y = zeros<vec>(n);
 	vec x = zeros<vec>(n);
 	vec s = zeros<vec>(n);
+	//definerer matrisene
 	mat A = zeros<mat>(n, n);
 	mat L, U;
+	//bruker for lokke til å sette inn elementer inn i A og s.
 	for (int i = 0; i < n; i++) {
 		A(i, i) = 2;
 		if (i - 1 >= 0) {
@@ -51,21 +53,23 @@ int main(int argc, char* argv[]) {
 		s(i) = h * h * f(h * i);
 	}
 
-	high_resolution_clock::time_point t1 = high_resolution_clock::now();
+	high_resolution_clock::time_point t1 = high_resolution_clock::now(); //Starter tid
 	lu(L, U, A); //dekomperer matrise A til L og U.
-	y = solve(L, s);
+	//loser y og x.
+	y = solve(L, s); 
 	x = solve(U, y);
-	high_resolution_clock::time_point t2 = high_resolution_clock::now();
-	duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+	high_resolution_clock::time_point t2 = high_resolution_clock::now(); //Slutter tid
+	duration<double> time_span = duration_cast<duration<double>>(t2 - t1);//beregner tid
 
 	cout << "Time for LU: " << time_span.count() << " s med n = " << n << endl;
-
+	
+	//x inn i solution med 0 i start og slutten av vektoren.
 	vec solution = zeros<vec>(n + 2);
 	for (int i = 0; i < n; i++) {
 		solution(i + 1) = x(i);
 	}
-	solution.save("LU_plot", raw_ascii);
-
+	solution.save("LU_plot", raw_ascii);//lagrer fil
+	//beregner error
 	double* error = new double[n + 2];
 	error[0] = 0.0;
 	error[n+1] = 0.0;
@@ -76,6 +80,7 @@ int main(int argc, char* argv[]) {
 			max_error = error[i];
 		}
 	}
+	//sender data til en fil
 	ofstream myfile("LU_error_plot");
 	if (myfile.is_open())
 	{
@@ -96,7 +101,7 @@ double relativError(double nummerical, double exact) {
 		r = 0;
 	}
 	else {
-		r = abs((nummerical - exact) / (exact));
+		r = abs((nummerical - exact) / (exact)); //relativ feil
 	}
 	return r;
 }
