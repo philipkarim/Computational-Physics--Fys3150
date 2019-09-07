@@ -104,9 +104,9 @@ int main(int argc, char* argv[]) {
 		ofile.open(fileout);
 		ofile << setiosflags(ios::showpoint | ios::uppercase);
 		//sender error: log10(h) --- log10(error)
-		ofile << setprecision(12) << left << setw(25) << log10(h)
+		/*ofile << setprecision(12) << left << setw(25) << log10(h)
 			<< left << setw(25) <<  log10(max_error)
-			<< endl;
+			<< endl;*/
 		for (int z = 1; z < n; z++) {
 			//sender losningen til fil
 			ofile << setw(15) << setprecision(8) << u[z] <<endl;
