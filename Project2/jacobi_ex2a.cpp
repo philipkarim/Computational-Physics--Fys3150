@@ -1,7 +1,11 @@
-//JACOBI OPPGAVE 2A
+//JACOBI OPPGAVE 2B
 #include <iostream>
 #include <cmath>
 #include <armadillo>
+#include "prosjekt2funksjoner.h"
+#include <vector>
+#include <array>
+
 using namespace arma;
 using namespace std;
 
@@ -75,7 +79,7 @@ int main(){
 	return 0;
 }
 
-double maxoffdiag(mat& A, int* k, int* l,  int n){
+double maxoffdiag(mat& A, int* k, int* l, int* n){
 	double max = 0.0;
 	for (int i = 0; i < n; i++) {
 		for (int j = i+1; j < n; j++) {
@@ -132,4 +136,6 @@ void rotate(mat& A, mat& R, int k, int l, int n)
 		R(i, k) = c * r_ik - s * r_il;
 		R(i, l) = c * r_il + s * r_ik;
 	}
+
+
 }

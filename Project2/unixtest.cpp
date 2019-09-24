@@ -2,9 +2,13 @@
 #include <armadillo>
 #include <vector>
 #include <array>
+#include "prosjekt2funksjoner.h"
+#include "unixtest.h"
 
 using namespace std;
 using namespace arma;
+
+int main(){
 
 //using namespace std::vector;
 
@@ -13,9 +17,9 @@ using namespace arma;
 //maxdiagonal test
 
     double epsilon=10e-8;
-     int n=5;
+    int n=5;
 
-    //int k,l;
+    int k,l;
     mat Atest = zeros<mat>(n, n);
     mat Ctest = eye<mat>(n, n);
 
@@ -27,7 +31,6 @@ using namespace arma;
     ar[3] = 4;
     ar[4] = 5;
 
-    Atest(3,2)=9;
     for(int i = 0; i < n; i++ ){
         for (int j = 0; j < n; j++){
             Atest(i,j) = ar[i];
@@ -35,9 +38,10 @@ using namespace arma;
     }
     //setter max verdien vår til 9
     Atest(3,2)=9;
-     cout <<Atest;
+    cout <<Atest;
 
-    maxoffdiag ( double ** Atest, int * k, int * l, int n );
+
+    maxoffdiag(Atest,k,l,n);
     int max=9;
     if (abs(max-9.0<epsilon)){
         cout<< "Test bestatt";}
@@ -52,7 +56,7 @@ using namespace arma;
 
     double * ev_fasit_test=new double[n];
 
-    jacobi_method (double ** Atest, double** Ctest, int n);
+    jacobi_method (Atest,Ctest,n);
 
     for(int i = 0; i < n; i++ ){
             Ctest(i,i) = ev_jacobi_test[i];
@@ -60,10 +64,10 @@ using namespace arma;
 
 
     //sorterer elementene i stigende rekkefølge
-    vec ev_jacobi_test2=arma::sort(ev_jacobi_test);
+    vec ev_jacobi_test2=sort(ev_jacobi_test);
 
-    for (int i = 0; i < n; ++i){
-            cout << ar[i] << ";}
+    //for (int i = 0; i < n; ++i){
+      //      cout << ar[i] << ";}
 
     //selectionsort(ev_jacobi_test,n);
 
@@ -82,3 +86,5 @@ using namespace arma;
     else {
         cout<<"Test ikke bestått";
     }
+
+}

@@ -5,9 +5,11 @@ CONFIG -= qt
 
 SOURCES += \
         funksjoner.cpp \
+        jacobi_ex2a.cpp \
         jacobimetode.cpp \
         main.cpp \
-        test.cpp
+        test.cpp \
+        unixtest.cpp
 
 INCLUDEPATH += C:\Users\Philip\Desktop\armadillo-9.700.2\include
 DEPENDPATH += C:\Users\Philip\Desktop\armadillo-9.700.2\include
@@ -18,4 +20,5 @@ LIBS += \
     -lblas_win64_MT
 
 HEADERS += \
-    prosjekt2funksjoner.h
+    prosjekt2funksjoner.h \
+    unixtest.h
