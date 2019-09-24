@@ -9,7 +9,6 @@ using namespace std;
 using namespace arma;
 
 int main(){
-
 //using namespace std::vector;
 
 //skriver 2 tester, teste at vi får maxdiagonal og teste at vi får riktige egenverdier
@@ -56,7 +55,7 @@ int main(){
 
     double * ev_fasit_test=new double[n];
 
-    jacobi_method (Atest,Ctest,n);
+    rotate(Atest,Ctest,n);
 
     for(int i = 0; i < n; i++ ){
             Ctest(i,i) = ev_jacobi_test[i];

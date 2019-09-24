@@ -3,6 +3,8 @@
 #include <iomanip>
 #include <cmath>
 #include <cstdlib>
+#include <vector>
+#include <array>
 //#include "jacobimetode.h"
 #include "prosjekt2funksjoner.h"
 using namespace std;
