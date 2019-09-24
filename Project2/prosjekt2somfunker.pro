@@ -6,7 +6,8 @@ CONFIG -= qt
 SOURCES += \
         funksjoner.cpp \
         jacobimetode.cpp \
-        main.cpp
+        main.cpp \
+        test.cpp
 
 INCLUDEPATH += C:\Users\Philip\Desktop\armadillo-9.700.2\include
 DEPENDPATH += C:\Users\Philip\Desktop\armadillo-9.700.2\include
