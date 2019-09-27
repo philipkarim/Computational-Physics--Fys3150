@@ -33,7 +33,7 @@ int main(){
     double d_value = 2.0 / (h * h);
     double ikke_d_value = -1.0 / (h * h);
 
-    //Fyller elementer på A
+    //Fyller elementer på Atest
     for (int i = 0; i < n; i++) {
         A(i, i) = d_value;
         if (i != n - 1) {
@@ -42,7 +42,7 @@ int main(){
         }
     }
 
-    //Fyller elementer på A
+    //Fyller elementer på Ctest
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             if (i == j) {
