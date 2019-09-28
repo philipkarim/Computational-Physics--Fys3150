@@ -1,8 +1,6 @@
 import pylab as ppl
 import numpy as np
 
-def exact(x):
-    return 1.0 - (1 - np.exp(-10))*x -np.exp(-10*x)
 def readFile(readFile): 
     liste = [];
     file = open(readFile,"r")
