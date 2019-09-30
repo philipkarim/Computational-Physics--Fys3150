@@ -20,12 +20,13 @@ double* relativError(vec& nummerical, int* exact);
 int main(){
 	int n = 100; int rho_0 = 0; int rho_N = 10;
 	int k, l;
-	int z = 1; //z = 0 ingen potensial, z = 1 med potensial 1 e, z = 2 potensial 2 elek
-	int w = 0.01;
+	int z = 2; //z = 0 ingen potensial, z = 1 med potensial 1 e, z = 2 potensial 2 elek
+	double w = 5;
 	double h = (rho_N - rho_0) / ((float)n);
 	double epsilon = 1e-10;
 	double max_number_iterations = n*n*n;
 	int iterations = 0;
+	double rho;
 
 	//defining the matrix A and putting in elements:
 	mat R = zeros<mat>(n, n);
@@ -33,6 +34,7 @@ int main(){
 	vec eig_values = zeros<vec>(n);
 	vec eigenvectors = zeros<vec>(n);
 	vec arma_eigValue = zeros<vec>(n);
+	mat arma_eigVector = zeros<mat>(n,n);
 	vec potensial_1e = zeros<vec>(n);
 	vec potensial_2e = zeros<vec>(n);
 	vec num_eig = zeros<vec>(n);
@@ -49,8 +51,9 @@ int main(){
 			}
 		}
 		//beregner potensialene for 1 elek og 2 elek:
-		potensial_1e(i) = ((rho_0 + (i + 1) * h) * (rho_0 + (i + 1) * h)); //p^2
-		potensial_2e(i) = ((rho_0 + (i + 1) * h) * (rho_0 + (i + 1) * h) * w * w) + (1 / (rho_0 + (i + 1) * h)); //w^2*p^2 + 1/p
+		rho = rho_0 + (i + 1) * h;
+		potensial_1e(i) = rho* rho; //p^2
+		potensial_2e(i) = (rho* rho * w * w) + (1 / rho); //w^2*p^2 + 1/p
 	}
 	//beregner diagonal og ikke-diagonal elementer:
 	double d_value = 2.0 / (h * h);
@@ -85,8 +88,9 @@ int main(){
 		rotate(A, R, k, l, n);
 		iterations++;
 	}
+
 	cout << "Antall av interasjoner: " << iterations << "\n";
-	cout << "Nummerisk beregnet egenverdiene: " << endl;
+
 	for (int i = 0; i < n; i++) {
 		num_eig(i) =  A(i, i);
 	}
@@ -100,27 +104,25 @@ int main(){
 				num_eig[j] = temp;
 			}
 		}
-		cout << num_eig[i] << endl;
+		//cout << num_eig[i] << endl;
 	}
-	//
 	relativError(num_eig, a_verdi);
 
-	string fileout = "fil_400_";
-	string argument = to_string(rho_N);
+	/*string fileout = "R_fil_";
+	string argument = to_string(w);
 	fileout.append(argument);
 	ofile.open(fileout);
 	ofile << setiosflags(ios::showpoint | ios::uppercase);
-	for (int z = 0; z < 4; z++) {
+	ofile << setw(15) << setprecision(8) << R << endl;*/
+	/*for (int z = 0; z < 4; z++) {
 		ofile << setw(15) << setprecision(8) << relativError(num_eig, a_verdi)[z] << endl;
-	}
-	ofile.close();
+	}ofile.close();
+	*/
 
 
-	/*
 	//bruker Arma til å finne ekstakte egenverdier:
-	eig_sym(arma_eigValue, A);
-	cout <<"Armadillo sin verdi: " << endl;
-	cout <<arma_eigValue << endl;*/
+	eig_sym(arma_eigValue, arma_eigVector, A);
+	ofile.close();
 	return 0;
 }
 
@@ -137,7 +139,7 @@ void fylleMatriseA(mat& A,int n, double h){
 void fylleMatriseA_potensial(mat& A, int n, double h, int rho_0, vec& p){
 	//putter inn A elementer med potensial
 	for (int i = 0; i < n; i++) {
-		A(i, i) = 2.0 / (h * h) + p(i); //adder til potensial
+		A(i, i) = (2.0 / (h * h)) + p(i); //adder til potensial
 		if (i != n - 1) {
 			A(i + 1, i) = -1.0 / (h * h);
 			A(i, i + 1) = -1.0 / (h * h);
