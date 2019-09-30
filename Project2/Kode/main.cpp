@@ -6,6 +6,10 @@
 #include <iomanip>
 #include <fstream>
 
+//importerer disse for å beregne tiden:
+#include <ctime>
+#include <ratio>
+#include <chrono>
 using namespace arma;
 using namespace std;
 
