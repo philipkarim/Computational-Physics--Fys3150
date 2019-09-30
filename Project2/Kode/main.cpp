@@ -1,4 +1,3 @@
-//JACOBI OPPGAVE 2B and 2D:
 #include <iostream>
 #include <cmath>
 #include <armadillo>
@@ -10,6 +9,7 @@
 #include <ctime>
 #include <ratio>
 #include <chrono>
+
 using namespace arma;
 using namespace std;
 
