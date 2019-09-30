@@ -13,6 +13,9 @@
 using namespace arma;
 using namespace std;
 
+//beregner tiden med chrono
+using namespace std::chrono;
+
 ofstream ofile;
 
 void fylleMatriseA(mat& A,int n,double h);
@@ -85,12 +88,17 @@ int main(){
 		cout << "Beregner egenverdiene med potensial med 2e:" << endl;
 		fylleMatriseA_potensial(A, n, h, rho_0, potensial_2e);
 	}
-
+	high_resolution_clock::time_point t1 = high_resolution_clock::now(); //Start tid
 	double max_offdiag = maxoffdiag(A, &k, &l, n);
 	while (fabs(max_offdiag) > epsilon && (double)iterations < max_number_iterations) {
 		max_offdiag = maxoffdiag(A, &k, &l, n);
 		rotate(A, R, k, l, n);
 		iterations++;
+	high_resolution_clock::time_point t2 = high_resolution_clock::now();//slutt tid
+	//beregner tidsforskjellen
+	duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+
+	cout << "Time for Jacobis algoritme: " << time_span.count() << " s med n = " << n << endl;
 	}
 
 	cout << "Antall av interasjoner: " << iterations << "\n";
@@ -125,7 +133,13 @@ int main(){
 
 
 	//bruker Arma til å finne ekstakte egenverdier:
+	high_resolution_clock::time_point t3 = high_resolution_clock::now(); //Start tid
 	eig_sym(arma_eigValue, arma_eigVector, A);
+	high_resolution_clock::time_point t4 = high_resolution_clock::now();//slutt tid
+	//beregner tidsforskjellen
+	duration<double> time_span = duration_cast<duration<double>>(t4 - t3);
+
+	cout << "Time for armadillo: " << time_span.count() << " s med n = " << n << endl;
 	ofile.close();
 	return 0;
 }
