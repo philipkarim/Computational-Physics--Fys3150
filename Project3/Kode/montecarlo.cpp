@@ -9,8 +9,7 @@
 #include <ratio>
 #include <chrono>
 
-using namespace std::chrono;
-//beregner tiden med chrono
+using namespace std::chrono; //beregner tiden med chrono
 using namespace std;
 using namespace arma;
 
@@ -20,7 +19,7 @@ double relativError(double nummerical, double exact);
 
 int main() {
 	long int n; double a, b;
-	n = 10e7; a = -3.0; b = 3.0;
+	n = 10e5; a = -3.0; b = 3.0; //bestemmer N og grensene her
 
 	double fx, sum_sigma, crude_mc, var_mc, int_mc,int_exact,rela_feil_mc, rela_feil_mc_imSa;
 	double r1,r2,costheta1,costheta2,phi1,phi2,l, var_mc_imSa, int_mc_imSa;
@@ -29,11 +28,10 @@ int main() {
 	vec y = zeros<vec>(6);
 	int_exact = (5 * PI * PI) / (16 * 16);
 
-	arma_rng::set_seed_random();
-
-	high_resolution_clock::time_point t1 = high_resolution_clock::now(); //Start tid
+	//BRUTE FORCE
+	arma_rng::set_seed_random(); // forandrer RNG seed
 	crude_mc = 0.0; fx = 0.0; sum_sigma = 0.0;
-
+	high_resolution_clock::time_point t1 = high_resolution_clock::now(); //Start tid
 	for (int i = 1; i <= n; i++) {
 		//fyller x med 6 random verdier fra 0 til 1.
 		vec x = randu<vec>(6);
@@ -66,10 +64,12 @@ int main() {
 	cout << "Standard deviation: " << pow((b - a), 6) * sqrt(var_mc / ((double)n)) <<endl;
 	cout << "Tid: " << time_span.count() << " s" << endl;
 
-	arma_rng::set_seed_random(); // change RNG seed
+	//IMPORTANCE SAMPLING
+	arma_rng::set_seed_random(); // forandrer RNG seed
 	high_resolution_clock::time_point t3 = high_resolution_clock::now();//start tid
 	crude_mc = 0.0; fx = 0.0; sum_sigma = 0.0; l = 1.0 / 4;
-	#pragma omp parallel for private(y) reduction(+:fx) reduction(+:sum_sigma)
+	//paralellisering:
+	//#pragma omp parallel for private(i) reduction(+:crude_mc) reduction(+:sum_sigma)
 	for (int i = 1; i <= n; i++) {
 		vec x1 = randu<vec>(6);
 
@@ -112,7 +112,7 @@ double integrate(double x1, double y1, double z1, double x2, double y2, double z
 	double ledd1= exp(-2 * alpha * (r1 + r2));
 	double ledd2 = sqrt(pow((x1 - x2), 2) + pow((y1 - y2), 2) + pow((z1 - z2), 2));
 
-	if (ledd2 < 1e-10){
+	if (ledd2 < 1e-10){ //unngå å dele på null
 		return 0;
 	}
 	else {
@@ -123,7 +123,7 @@ double ingerate_impor(double r1,double r2,double costheta1,double costheta2,doub
 	double ledd1 = r1 * r1 * r2 * r2;
 	double cosB = costheta1 * costheta2 + sqrt(1 - costheta1 * costheta1) * sqrt(1 - costheta2 * costheta2) * cos(phi1 - phi2);
 	double ledd2 = sqrt(r1 * r1 + r2 * r2 - 2 * r1 * r2 * cosB);
-	if (ledd2 < 1e-10) {
+	if (ledd2 < 1e-10) { //unngå å dele på null
 		return 0;
 	}
 	else {
@@ -141,16 +141,3 @@ double relativError(double nummerical, double exact) {
 	}
 	return r;
 }
-
-
-//#include<iostream>
-//#include<omp.h>
-//using namespace std;
-//int main() {
-//	omp_set_num_threads(4);
-//	#pragma omp parallel
-//	{
-//		cout << "Hello \n" << endl;
-//	}
-//	return 0;
-//}
