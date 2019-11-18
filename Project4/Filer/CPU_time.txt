@@ -1,0 +1,70 @@
+All spins pointing upwards:
+deltaT = 0.05
+For L = 20 
+minimum Monte Carlo sykluser:   2
+Time102.905 s
+Time 102.868 s
+Time 102.808 s
+Time 102.766 s
+
+For L = 40
+Minimum Monte Carlo sykluser (likevekt):        2
+CPU time: 384.905 s
+CPU time: 384.87 s
+CPU time: 384.825 s
+CPU time: 384.788 s
+
+For L = 60
+Minimum Monte Carlo sykluser (likevekt):        2
+CPU time: 869.244 s
+CPU time: 869.217 s
+CPU time: 869.178 s
+CPU time: 869.125 s
+
+
+For L = 80
+Minimum Monte Carlo sykluser (likevekt):        2
+CPU time: 1682.29 s
+CPU time: 1682.25 s
+CPU time: 1682.37 s
+CPU time: 1682.34 s
+
+L = 100
+CPU time: 3175.64 s
+CPU time: 3175.6 s
+CPU time: 3175.53 s
+CPU time: 3175.67 s
+
+deltaT = 0.01
+
+L = 20
+CPU time: 509.507 s
+CPU time: 509.479 s
+CPU time: 509.437 s
+CPU time: 509.393 s
+
+L = 40
+CPU time: 1899.87 s
+CPU time: 1899.83 s
+CPU time: 1899.78 s
+CPU time: 1899.74 s
+
+L = 60:
+CPU time: 4228.46 s
+CPU time: 4228.48 s
+CPU time: 4228.44 s
+CPU time: 4228.42 s
+
+L = 80
+CPU time: 8395.74 s
+CPU time: 8395.72 s
+CPU time: 8395.7 s
+CPU time: 8395.68 s
+
+L = 100
+CPU time: 13110.2 s
+CPU time: 13110.2 s
+CPU time: 13110.1 s
+CPU time: 13110.1 s
+
+
