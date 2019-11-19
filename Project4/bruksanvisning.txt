@@ -1,14 +1,15 @@
-Programmet skrevet på mest enkleste måten. I main så må brukeren angi følgende variabler:
-* l: gitter størrelse
+Programmet kjørt på enklest mulig måte:
+I main må brukeren angi følgende variabler i følgende rekkefølge:
+*gitter størrelse
 *MC_cycles: antall monte Carlo sykluser
-*T : kontant temperatur for opp b
+*T : konstant temperatur for oppg b
 *random: true hvis tilfedig spinn. False: spinn samme retning
 
-* temp_step:                         
-* initial_temp: start temperatur                           
-* final_temp: sluttemperatur        
+*temp_step:                         
+*initial_temp: start temperatur                           
+*final_temp: sluttemperatur        
 
 Videre må brukeren navngi filene. Det er tre filer som blir fylt gjennom dette programmet:
 *filename_MC
 *filename_E
-filename_T                  
+*filename_T                  
