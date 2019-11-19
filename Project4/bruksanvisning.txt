@@ -2,6 +2,7 @@ Programmet skrevet på mest enkleste måten. I main så må brukeren angi følge
 * l: gitter størrelse
 *MC_cycles: antall monte Carlo sykluser
 *T : kontant temperatur for opp b
+*random: true hvis tilfedig spinn. False: spinn samme retning
 
 * temp_step:                         
 * initial_temp: start temperatur                           
