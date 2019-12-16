@@ -1,0 +1,2 @@
+Variabler:
+*valg_av_algortime: 0 for VV og 1 for EF
