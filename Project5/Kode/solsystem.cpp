@@ -4,19 +4,19 @@
 
 #include <iostream>
 #include <iomanip>
-#include <chrono>
 #include <math.h>
 #include<vector>
 #include<string>
 
 using namespace std;
+using namespace std::chrono;
 
 solsystem::solsystem(){
 
 }
 
-CelestialBody& solsystem::lag_body(double masse, double xpos, double ypos, double xhas, double yhas, double beta){
-  bodies.push_back(CelestialBody(masse, xpos, ypos,xhas,yhas,beta));
+CelestialBody& solsystem::lag_body(double masse, double xpos, double ypos, double xhas, double yhas, double beta,bool relativitisk_newton){
+  bodies.push_back(CelestialBody(masse, xpos, ypos,xhas,yhas,beta,relativitisk_newton));
   return bodies.back(); //returnerer siste element i vektoren som er nylig addet
 }
 
@@ -49,10 +49,73 @@ void solsystem::kalkulering_akselerasjon(vector<CelestialBody>& bodies){
 void solsystem::kjoring_algoritme(CelestialBody& body, string outfilename, double FinalTime, int Numberofhs,bool valg_av_algortime){
   kalkulering_akselerasjon(bodies);
 	if (valg_av_algortime){
-    euler(body, FinalTime, Numberofhs,outfilename );
+    euler(body, FinalTime, Numberofhs,outfilename);
 	}
 	else{
-		velocityVerlet(body, FinalTime, Numberofhs,outfilename);
+    //velg 0 for generel og 1 for relativitisk_newton
+		velocityVerlet(body, FinalTime, Numberofhs,outfilename,0);
 	}
+}
+void solsystem::merkur_presesjon (CelestialBody& body, double FinalTime,int Numberofhs,string outfilename){
+  ofstream merkur_fil;
+  merkur_fil.open("Merkur.txt");
+  ofstream presesjon_fil;
+  presesjon_fil.open("presesjon.txt");
+  int counter = 0;
+  for(int i = 1; i < Numberofhs;i++ ){
+    kalkulering_akselerasjon(bodies);
+    velocityVerlet(body, FinalTime, Numberofhs,outfilename,0);
+    merkur_fil << setprecision(8) << fixed << body.xpos << setw(20) << body.ypos << endl;
 
+    if((body.r*body.r* - 0.3075*0.3075)  < 1E-12 ){
+      presesjon_fil << setprecision(8) << fixed <<counter <<  setw(20) << atan(body.ypos / body.xpos) <<endl;
+      counter ++;
+    }
+  }
+}
+void solsystem::energi(string energi_fil,double Numberofhs,double FinalTime){
+  double kin,pot,total,ang_m,t = 0.0;
+  double h = FinalTime/Numberofhs;
+  for(int i = 0; i < numberOfBodies(); i++){
+      pot = -FourPi2 * bodies[i].masse / bodies[i].r;
+      kin = 0.5*bodies[i].masse * (bodies[i].xhas*bodies[i].xhas + bodies[i].yhas*bodies[i].yhas);
+      total = pot + kin;
+      ang_m = sqrt(pow(bodies[i].xpos*bodies[i].yhas, 2) + pow(bodies[i].ypos*bodies[i].xhas, 2));
+      t ++;
+      writing_energy(t,kin,pot,total,ang_m,energi_fil);
+  }
+}
+void solsystem::writing_energy(double t,double kin,double pot,double total,double ang_m,string energi_fil){
+  ofstream fil;
+  fil.open(energi_fil, ios::app);
+  fil << setiosflags(ios::showpoint | ios::uppercase);
+  fil << setw(15) << setprecision(8) << t ;
+  fil << setw(15) << setprecision(8) << kin;
+  fil << setw(15) << setprecision(8) << pot;
+  fil << setw(15) << setprecision(8) << total;
+  fil << setw(15) << setprecision(8) << ang_m
+  << endl;
+}
+
+void solsystem::beregning_tid(solsystem& system) {
+
+	// int FinalTime = 20;
+	// ofstream myFile;
+	// myFile.open("Tid.txt");
+	// myFile << setprecision(8) << fixed << "N " << setw(20) << "Euler(s) " << setw(20) << "Verlet(s)" << endl;
+  //
+	// for (int i = 10; i < 1e6 + 1; i=10 * i) {
+  //
+	// 	high_resolution_clock::time_point te1 = high_resolution_clock::now();
+	// 	system.kjoring_algoritme(system.bodies[0], "Earth.txt", FinalTime, i, 1);
+	// 	high_resolution_clock::time_point te2 = high_resolution_clock::now();
+	// 	duration<double> eulerTime = duration_cast<duration<double>>(te2 - te1);
+  //
+	// 	high_resolution_clock::time_point tv1 = high_resolution_clock::now();
+	// 	system.kjoring_algoritme(system.bodies[0], "Earth.txt", FinalTime, i, 0);
+	// 	high_resolution_clock::time_point tv2 = high_resolution_clock::now();
+	// 	duration<double> verletTime = duration_cast<duration<double>>(tv2 - tv1);
+  //
+	// 	myFile << setprecision(8) << fixed << i << setw(20) << eulerTime.count() << setw(20) << verletTime.count() << endl;
+	// }
 }

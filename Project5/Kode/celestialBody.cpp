@@ -13,7 +13,7 @@
 using namespace std;
 
 CelestialBody::CelestialBody(double m, double x,double y,
-  double vx,double vy,double b){
+  double vx,double vy,double b,bool relativitisk_newton){
     masse = m;
     xpos = x;
     ypos = y;
@@ -21,7 +21,12 @@ CelestialBody::CelestialBody(double m, double x,double y,
     xhas = vx;
     yhas = vy;
     beta = b;
-    xaks = -(4 * pi*pi*xpos) / (pow(r, beta + 1));
-		yaks = -(4 * pi*pi*ypos) / (pow(r, beta + 1));
+    if(!relativitisk_newton){
+      xaks = -(4 * pi*pi*xpos) / (pow(r, beta + 1));
+  		yaks = -(4 * pi*pi*ypos) / (pow(r, beta + 1));
+    }else{
+      xaks = -((4 * pi*pi*xpos) / (pow(r, beta + 1))) *(1+3*(pow(xpos*yhas,2) + pow(ypos*xhas,2)))/(pow(r,2)*pow(3e8*60*60*24*365/ 1.496e8, 2));
+      yaks = -((4 * pi*pi*ypos) / (pow(r, beta + 1))) *(1+3*(pow(xpos*yhas,2) + pow(ypos*xhas,2)))/(pow(r,2)*pow(3e8*60*60*24*365/ 1.496e8, 2));
+    }
 
   }

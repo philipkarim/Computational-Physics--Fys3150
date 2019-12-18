@@ -16,7 +16,6 @@ public:
   double xaks,yaks;
   double beta;
 
-  CelestialBody(double m, double x,double y,
-    double vx,double vy,double b);
+  CelestialBody(double m, double x,double y,double vx,double vy,double b,bool relativitisk_newton);
 
 };
