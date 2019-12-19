@@ -1,5 +1,0 @@
-Variabler:
-*valg_av_algortime: 0 for VV og 1 for EF
-
-solsystem.lag_body(masse_med_hensyn_pa_sola, x,y,vx,vy,beta-verdi)
-  solsystem.lag_body(3e-6, 1, 0, 0, 2.0*pi, 2);  //Earth
