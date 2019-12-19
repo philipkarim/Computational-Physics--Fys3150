@@ -13,6 +13,7 @@
 
 using namespace std::chrono;
 using namespace  std;
+
 //Definerer steglengder, tider, og skaleringskonstant for hastighet
 int Numberofhs = 10000;
 double StartTime = 0.0;
@@ -22,7 +23,7 @@ double vsc = (60 * 60 * 24 * 365) / (1.496e8);
 int main()
 {
   solsystem Solsystem;
-
+  //Lager de forskjellige planetene
   Solsystem.lag_body(1.6425e-7, 0.39, 0, 0, 48 * vsc, 2, 0); //Merkur
   Solsystem.lag_body(2.4335e-6, 0.72, 0, 0, 35 * vsc,2,0); //Venus
   Solsystem.lag_body(3e-6, 1, 0, 0, 2*pi, 2, 0);  //Jorda
@@ -31,7 +32,8 @@ int main()
   Solsystem.lag_body(2.75e-4, 9.54, 0, 0, 9.6*vsc, 2,0); //Saturn
   Solsystem.lag_body(4.4e-5, 19.19, 0, 0, 6.80*vsc, 2,0); //Uranus
   Solsystem.lag_body(5.15e-5, 30.06, 0, 0, 5.43*vsc, 2,0); //Neptun
-
+  
+  //Fjerner de tidligere filene
   remove("Energi.txt");
   remove("Mercury.txt");
   remove("Venus.txt");
