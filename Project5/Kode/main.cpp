@@ -5,13 +5,15 @@
 #include<string>
 #include <chrono>
 
-
+//Inkluderer headerfiles
 #include "algoritmer.h"
 #include"solsystem.h"
 #include"celestialBody.h"
 
 
 using namespace  std;
+
+//Definerer steglengder, tider, og skaleringskonstant for hastighet
 int Numberofhs = 10000;
 double StartTime = 0.0;
 double FinalTime = 200;
