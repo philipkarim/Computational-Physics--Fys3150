@@ -14,6 +14,7 @@ using namespace std;
 
 CelestialBody::CelestialBody(double m, double x,double y,
   double vx,double vy,double b,bool relativitisk_newton){
+    //her registeres det variabler som skal brukes senere i solsystem
     masse = m;
     xpos = x;
     ypos = y;
@@ -21,6 +22,7 @@ CelestialBody::CelestialBody(double m, double x,double y,
     xhas = vx;
     yhas = vy;
     beta = b;
+    //beregnes akselerasjonen avhengig om det er relativitisk eller ikke
     if(!relativitisk_newton){
       xaks = -(4 * pi*pi*xpos) / (pow(r, beta + 1));
   		yaks = -(4 * pi*pi*ypos) / (pow(r, beta + 1));
