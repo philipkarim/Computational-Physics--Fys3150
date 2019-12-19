@@ -5,8 +5,8 @@ import numpy as np;
 
 def readFile(filename,navn):
     data = np.loadtxt(filename,unpack=True)
-    x = data[1]
-    y = data[2]
+    x = data[0]
+    y = data[1]
     plt.plot(x,y,label = navn)
 
 readFile("Mercury.txt","Merkur")
@@ -18,10 +18,11 @@ readFile("Saturn.txt","Saturn")
 readFile("Uranus.txt","Uranus")
 readFile("Neptune.txt","Neptrun")
 
+plt.plot(0,0,'ro',label = "Sola")
 plt.xlabel('x [AU]')
 plt.ylabel('y [AU]')
 plt.legend()
 plt.axis('equal')
 plt.grid("on")
-plt.savefig('solsystem.png')
+plt.savefig('Solsystem.png')
 plt.show()

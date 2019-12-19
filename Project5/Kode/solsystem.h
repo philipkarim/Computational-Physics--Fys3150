@@ -10,8 +10,6 @@
 #include <math.h>
 #include<vector>
 
-#include<ctime>
-
 
 using namespace std;
 
@@ -26,7 +24,7 @@ public:
   int numberOfBodies();
   void printBodies();
   void kjoring_algoritme(CelestialBody& body, string outfilename, double FinalTime, int Numberofhs,bool valg_av_algortime,bool relativitisk_newton);
-  void merkur_presesjon (CelestialBody& theBody, double FinalTime, int Numberofhs,string outfilename);
+  void merkur_presesjon (CelestialBody& body, double FinalTime, int Numberofhs,string outfilename);
   void energi(string energi_fil,double Numberofhs,double FinalTime);
   void writing_energy(double,double,double, double,double,string);
   void beregning_tid(solsystem& system);

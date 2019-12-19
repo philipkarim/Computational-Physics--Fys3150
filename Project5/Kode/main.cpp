@@ -13,20 +13,15 @@
 
 using namespace std::chrono;
 using namespace  std;
+int Numberofhs = 10000;
+double StartTime = 0.0;
+double FinalTime = 200;
+double vsc = (60 * 60 * 24 * 365) / (1.496e8); // Velocity scaling factor from km/s to au/year
 
 int main()
 {
   solsystem Solsystem;
 
-  int Numberofhs = 10000;
-  double StartTime = 0.0;
-  double FinalTime = 85;
-
-  double vsc = (60 * 60 * 24 * 365) / (1.496e8); // Velocity scaling factor from km/s to au/year
-  double v_sola = (-(1.6425e-7)*48 - (2.4335e-6)*35 -(3e-6)*29.79 - (3.195e-7)* 24.1 -(9.5e-4)*13.07
-  - (2.75e-4)* 9.6 - (4.4e-5)* 6.80 -(5.15e-5)* 5.43)*vsc;
-
-  //Solsystem.lag_body(1, 0, 0, 0,v_sola , 2,0);
   Solsystem.lag_body(1.6425e-7, 0.39, 0, 0, 48 * vsc, 2, 0); //Mercury
 	Solsystem.lag_body(2.4335e-6, 0.72, 0, 0, 35 * vsc,2,0); //Venus
 	Solsystem.lag_body(3e-6, 1, 0, 0, 29.79*vsc, 2, 0);  //Earth
@@ -49,7 +44,7 @@ int main()
   for(int i = 1;i < Numberofhs; i++ ){
     Solsystem.kjoring_algoritme(Solsystem.bodies[0], "Mercury.txt", FinalTime, Numberofhs, 0,0);
 		Solsystem.kjoring_algoritme(Solsystem.bodies[1], "Venus.txt", FinalTime, Numberofhs, 0,0);
-		Solsystem.kjoring_algoritme(Solsystem.bodies[2], "Earth.txt", FinalTime, Numberofhs, 0,0);
+		Solsystem.kjoring_algoritme(Solsystem.bodies[1], "Earth.txt", FinalTime, Numberofhs, 0,0);
 		Solsystem.kjoring_algoritme(Solsystem.bodies[3], "Mars.txt", FinalTime, Numberofhs, 0,0);
 		Solsystem.kjoring_algoritme(Solsystem.bodies[4], "Jupiter.txt", FinalTime, Numberofhs, 0,0);
 		Solsystem.kjoring_algoritme(Solsystem.bodies[5], "Saturn.txt", FinalTime, Numberofhs, 0,0);

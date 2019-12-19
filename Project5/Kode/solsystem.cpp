@@ -5,7 +5,6 @@
 #include <iostream>
 #include <iomanip>
 #include <math.h>
-#include<vector>
 #include<string>
 
 using namespace std;
@@ -37,9 +36,8 @@ void solsystem::kalkulering_akselerasjon(vector<CelestialBody>& bodies){
         double r12 = sqrt(pow((body1.xpos - body2.xpos), 2) + pow((body1.ypos - body2.ypos), 2));
         body1.xaks = body1.xaks - FourPi2*body2.masse*(body1.xpos - body2.xpos) / pow(r12, body1.beta+1);
         body2.xaks = body2.xaks + FourPi2*body2.masse*(body1.xpos - body2.xpos) / pow(r12, body1.beta+1);
-
-        body1.yaks = body1.yaks - FourPi2*body2.masse*(body1.xpos - body2.xpos) / pow(r12, body1.beta+1);
-        body2.yaks = body2.yaks + FourPi2*body2.masse*(body1.xpos - body2.xpos) / pow(r12, body1.beta+1);
+        body1.yaks = body1.yaks - FourPi2*body2.masse*(body1.ypos - body2.ypos) / pow(r12, body1.beta+1);
+        body2.yaks = body2.yaks + FourPi2*body2.masse*(body1.ypos - body2.ypos) / pow(r12, body1.beta+1);
         bodies[j] = body2;
       }
     }
@@ -47,6 +45,8 @@ void solsystem::kalkulering_akselerasjon(vector<CelestialBody>& bodies){
   }
 }
 void solsystem::kjoring_algoritme(CelestialBody& body, string outfilename, double FinalTime, int Numberofhs,bool valg_av_algortime,bool relativitisk_newton){
+  ofstream toFile;
+  toFile.open(outfilename, ios::app);
   kalkulering_akselerasjon(bodies);
 	if (valg_av_algortime){
     euler(body, FinalTime, Numberofhs,outfilename);
@@ -55,6 +55,8 @@ void solsystem::kjoring_algoritme(CelestialBody& body, string outfilename, doubl
     //velg 0 for generel og 1 for relativitisk_newton
 		velocityVerlet(body, FinalTime, Numberofhs,outfilename,relativitisk_newton);
 	}
+	toFile << setprecision(8) << fixed << body.xpos << setw(20) << body.ypos << endl;
+
 }
 void solsystem::merkur_presesjon (CelestialBody& body, double FinalTime,int Numberofhs,string outfilename){
   ofstream merkur_fil;

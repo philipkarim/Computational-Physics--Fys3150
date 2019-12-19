@@ -38,6 +38,7 @@ void velocityVerlet(CelestialBody& body, double FinalTime, int Numberofhs,string
 
     body.xpos = body.xpos+h*body.xhas +(h*h/2)*body.xaks;
     body.ypos =  body.ypos+h*body.yhas+(h*h/2)*body.yaks;
+
     body.r = sqrt(body.xpos*body.xpos+body.ypos*body.ypos);
     if(!relativitisk_newton){
       nest_xaks = -(FourPi2*body.xpos) / (pow(body.r, body.beta + 1));
@@ -46,6 +47,7 @@ void velocityVerlet(CelestialBody& body, double FinalTime, int Numberofhs,string
         body.xaks = -((FourPi2*body.xpos) / (pow(body.r, body.beta + 1))) *(1+3*(pow(body.xpos*body.yhas,2) + pow(body.ypos*body.xhas,2)))/(pow(body.r,2)*pow(3e8*60*60*24*365/ 1.496e8, 2));
         body.yaks = -((FourPi2*body.ypos) / (pow(body.r, body.beta + 1))) *(1+3*(pow(body.xpos*body.yhas,2) + pow(body.ypos*body.xhas,2)))/(pow(body.r,2)*pow(3e8*60*60*24*365/ 1.496e8, 2));
     }
+    
     body.xhas= body.xhas+(h/2)*body.xaks+(h/2)*nest_xaks;
     body.yhas= body.yhas+(h/2)*body.yaks+(h/2)*nest_yaks;
 
@@ -63,17 +65,17 @@ void velocityVerlet(CelestialBody& body, double FinalTime, int Numberofhs,string
 void output(double time, double x, double y, double xhas, double yhas,string outfilename,double kinetisk_energi,double potensiell_energi,
   double total_energi,double angular_moment)
 {
-  ofstream ofile;
-  ofile.open(outfilename, ios::app);
-  ofile << setiosflags(ios::showpoint | ios::uppercase);
-  ofile << setw(20) << setprecision(8) << time ;
-  ofile << setw(20) << setprecision(8) << x;
-  ofile << setw(20) << setprecision(8) << y;
-  ofile << setw(20) << setprecision(8) << xhas;
-  ofile << setw(20) << setprecision(8) << yhas;
-  ofile << setw(20) << setprecision(8) << kinetisk_energi;
-  ofile << setw(20) << setprecision(8) << potensiell_energi;
-  ofile << setw(20) << setprecision(8) << total_energi;
-  ofile << setw(20) << setprecision(8) << angular_moment
-  << endl;
+  // ofstream ofile;
+  // ofile.open(outfilename, ios::app);
+  // ofile << setiosflags(ios::showpoint | ios::uppercase);
+  // ofile << setw(20) << setprecision(8) << time ;
+  // ofile << setw(20) << setprecision(8) << x;
+  // ofile << setw(20) << setprecision(8) << y;
+  // ofile << setw(20) << setprecision(8) << xhas;
+  // ofile << setw(20) << setprecision(8) << yhas;
+  // ofile << setw(20) << setprecision(8) << kinetisk_energi;
+  // ofile << setw(20) << setprecision(8) << potensiell_energi;
+  // ofile << setw(20) << setprecision(8) << total_energi;
+  // ofile << setw(20) << setprecision(8) << angular_moment
+  // << endl;
 }
