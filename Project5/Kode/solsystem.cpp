@@ -28,6 +28,11 @@ void solsystem::printBodies() {
 	}
 }
 void solsystem::kalkulering_akselerasjon(vector<CelestialBody>& bodies){
+  double kin,pot,total,ang_m,t = 0.0;
+  double FinalTime,Numberofhs; FinalTime = 200; Numberofhs = 10000;
+  double h = FinalTime/Numberofhs;
+  ofstream fil;
+  fil.open("Energi.txt", ios::app);
   for (int i = 0;i <numberOfBodies(); i++){
     CelestialBody body1 = bodies[i];
     for(int j = 0; j <numberOfBodies();j++ ){
@@ -42,6 +47,18 @@ void solsystem::kalkulering_akselerasjon(vector<CelestialBody>& bodies){
       }
     }
     bodies[i] = body1;
+    pot = -FourPi2 * bodies[i].masse / bodies[i].r;
+    kin = 0.5*bodies[i].masse * (bodies[i].xhas*bodies[i].xhas + bodies[i].yhas*bodies[i].yhas);
+    total = pot + kin;
+    ang_m = sqrt(pow(bodies[i].xpos*bodies[i].yhas, 2) + pow(bodies[i].ypos*bodies[i].xhas, 2));
+    t ++;
+    fil << setiosflags(ios::showpoint | ios::uppercase);
+    fil << setw(20) << setprecision(8) << t ;
+    fil << setw(20) << setprecision(8) << kin;
+    fil << setw(20) << setprecision(8) << pot;
+    fil << setw(20) << setprecision(8) << total;
+    fil << setw(20) << setprecision(8) << ang_m
+    << endl;
   }
 }
 void solsystem::kjoring_algoritme(CelestialBody& body, string outfilename, double FinalTime, int Numberofhs,bool valg_av_algortime,bool relativitisk_newton){
@@ -65,40 +82,16 @@ void solsystem::merkur_presesjon (CelestialBody& body, double FinalTime,int Numb
   int counter = 0;
   for(int i = 1; i < Numberofhs;i++ ){
     kalkulering_akselerasjon(bodies);
-    velocityVerlet(body, FinalTime, Numberofhs,outfilename,0);
+    velocityVerlet(body, FinalTime, Numberofhs,outfilename,1);
     merkur_fil << setprecision(8) << fixed << body.xpos << setw(20) << body.ypos << endl;
-
-    if((body.r*body.r* - 0.3075*0.3075)  < 1E-12 ){
+    //(body.r*body.r* - 0.3075*0.3075)  < 1E-12
+    if(body.r < 0.3075){
       presesjon_fil << setprecision(8) << fixed <<counter <<  setw(20) << atan(body.ypos / body.xpos) <<endl;
       counter ++;
     }
   }
 }
-void solsystem::energi(string energi_fil,double Numberofhs,double FinalTime){
-  double kin,pot,total,ang_m,t = 0.0;
-  double h = FinalTime/Numberofhs;
-  ofstream fil;
-  fil.open(energi_fil, ios::app);
-  for(int i = 0; i < numberOfBodies(); i++){
-      pot = -FourPi2 * bodies[i].masse / bodies[i].r;
-      kin = 0.5*bodies[i].masse * (bodies[i].xhas*bodies[i].xhas + bodies[i].yhas*bodies[i].yhas);
-      total = pot + kin;
-      ang_m = sqrt(pow(bodies[i].xpos*bodies[i].yhas, 2) + pow(bodies[i].ypos*bodies[i].xhas, 2));
-      t ++;
-      writing_energy(t,kin,pot,total,ang_m,energi_fil);
-      fil << setiosflags(ios::showpoint | ios::uppercase);
-      fil << setw(20) << setprecision(8) << t ;
-      fil << setw(20) << setprecision(8) << kin;
-      fil << setw(20) << setprecision(8) << pot;
-      fil << setw(20) << setprecision(8) << total;
-      fil << setw(20) << setprecision(8) << ang_m
-      << endl;
-  }
-}
-void solsystem::writing_energy(double t,double kin,double pot,double total,double ang_m,string energi_fil){
 
-
-}
 
 void solsystem::beregning_tid(solsystem& system) {
 
