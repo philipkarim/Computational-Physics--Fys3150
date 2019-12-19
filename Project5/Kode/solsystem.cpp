@@ -46,14 +46,14 @@ void solsystem::kalkulering_akselerasjon(vector<CelestialBody>& bodies){
     bodies[i] = body1;
   }
 }
-void solsystem::kjoring_algoritme(CelestialBody& body, string outfilename, double FinalTime, int Numberofhs,bool valg_av_algortime){
+void solsystem::kjoring_algoritme(CelestialBody& body, string outfilename, double FinalTime, int Numberofhs,bool valg_av_algortime,bool relativitisk_newton){
   kalkulering_akselerasjon(bodies);
 	if (valg_av_algortime){
     euler(body, FinalTime, Numberofhs,outfilename);
 	}
 	else{
     //velg 0 for generel og 1 for relativitisk_newton
-		velocityVerlet(body, FinalTime, Numberofhs,outfilename,0);
+		velocityVerlet(body, FinalTime, Numberofhs,outfilename,relativitisk_newton);
 	}
 }
 void solsystem::merkur_presesjon (CelestialBody& body, double FinalTime,int Numberofhs,string outfilename){
@@ -76,6 +76,8 @@ void solsystem::merkur_presesjon (CelestialBody& body, double FinalTime,int Numb
 void solsystem::energi(string energi_fil,double Numberofhs,double FinalTime){
   double kin,pot,total,ang_m,t = 0.0;
   double h = FinalTime/Numberofhs;
+  ofstream fil;
+  fil.open(energi_fil, ios::app);
   for(int i = 0; i < numberOfBodies(); i++){
       pot = -FourPi2 * bodies[i].masse / bodies[i].r;
       kin = 0.5*bodies[i].masse * (bodies[i].xhas*bodies[i].xhas + bodies[i].yhas*bodies[i].yhas);
@@ -83,39 +85,39 @@ void solsystem::energi(string energi_fil,double Numberofhs,double FinalTime){
       ang_m = sqrt(pow(bodies[i].xpos*bodies[i].yhas, 2) + pow(bodies[i].ypos*bodies[i].xhas, 2));
       t ++;
       writing_energy(t,kin,pot,total,ang_m,energi_fil);
+      fil << setiosflags(ios::showpoint | ios::uppercase);
+      fil << setw(20) << setprecision(8) << t ;
+      fil << setw(20) << setprecision(8) << kin;
+      fil << setw(20) << setprecision(8) << pot;
+      fil << setw(20) << setprecision(8) << total;
+      fil << setw(20) << setprecision(8) << ang_m
+      << endl;
   }
 }
 void solsystem::writing_energy(double t,double kin,double pot,double total,double ang_m,string energi_fil){
-  ofstream fil;
-  fil.open(energi_fil, ios::app);
-  fil << setiosflags(ios::showpoint | ios::uppercase);
-  fil << setw(15) << setprecision(8) << t ;
-  fil << setw(15) << setprecision(8) << kin;
-  fil << setw(15) << setprecision(8) << pot;
-  fil << setw(15) << setprecision(8) << total;
-  fil << setw(15) << setprecision(8) << ang_m
-  << endl;
+
+
 }
 
 void solsystem::beregning_tid(solsystem& system) {
 
-	// int FinalTime = 20;
-	// ofstream myFile;
-	// myFile.open("Tid.txt");
-	// myFile << setprecision(8) << fixed << "N " << setw(20) << "Euler(s) " << setw(20) << "Verlet(s)" << endl;
-  //
-	// for (int i = 10; i < 1e6 + 1; i=10 * i) {
-  //
-	// 	high_resolution_clock::time_point te1 = high_resolution_clock::now();
-	// 	system.kjoring_algoritme(system.bodies[0], "Earth.txt", FinalTime, i, 1);
-	// 	high_resolution_clock::time_point te2 = high_resolution_clock::now();
-	// 	duration<double> eulerTime = duration_cast<duration<double>>(te2 - te1);
-  //
-	// 	high_resolution_clock::time_point tv1 = high_resolution_clock::now();
-	// 	system.kjoring_algoritme(system.bodies[0], "Earth.txt", FinalTime, i, 0);
-	// 	high_resolution_clock::time_point tv2 = high_resolution_clock::now();
-	// 	duration<double> verletTime = duration_cast<duration<double>>(tv2 - tv1);
-  //
-	// 	myFile << setprecision(8) << fixed << i << setw(20) << eulerTime.count() << setw(20) << verletTime.count() << endl;
-	// }
+	int FinalTime = 20;
+	ofstream myFile;
+	myFile.open("Tid.txt");
+	myFile << setprecision(8) << fixed << "N " << setw(20) << "Euler(s) " << setw(20) << "Verlet(s)" << endl;
+
+	for (int i = 10e5; i > 0 ; i=i/10) {
+
+		high_resolution_clock::time_point te1 = high_resolution_clock::now();
+		system.kjoring_algoritme(system.bodies[0], "Earth.txt", FinalTime, i, 1,0);
+		high_resolution_clock::time_point te2 = high_resolution_clock::now();
+		duration<double> eulerTime = duration_cast<duration<double>>(te2 - te1);
+
+		high_resolution_clock::time_point tv1 = high_resolution_clock::now();
+		system.kjoring_algoritme(system.bodies[0], "Earth.txt", FinalTime, i, 0,0);
+		high_resolution_clock::time_point tv2 = high_resolution_clock::now();
+		duration<double> verletTime = duration_cast<duration<double>>(tv2 - tv1);
+
+		myFile << setprecision(8) << fixed << i << setw(20) << eulerTime.count() << setw(20) << verletTime.count() << endl;
+	}
 }

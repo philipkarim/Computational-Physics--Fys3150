@@ -25,7 +25,7 @@ public:
   void kalkulering_akselerasjon(vector<CelestialBody>& bodies);
   int numberOfBodies();
   void printBodies();
-  void kjoring_algoritme(CelestialBody& body, string outfilename, double FinalTime, int Numberofhs,bool valg_av_algortime);
+  void kjoring_algoritme(CelestialBody& body, string outfilename, double FinalTime, int Numberofhs,bool valg_av_algortime,bool relativitisk_newton);
   void merkur_presesjon (CelestialBody& theBody, double FinalTime, int Numberofhs,string outfilename);
   void energi(string energi_fil,double Numberofhs,double FinalTime);
   void writing_energy(double,double,double, double,double,string);

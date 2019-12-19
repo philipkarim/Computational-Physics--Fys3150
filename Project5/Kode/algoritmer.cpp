@@ -14,7 +14,7 @@ double FourPi2 = 4*pi*pi;
 void euler(CelestialBody& body, double FinalTime, int Numberofhs,string outfilename){
   double h = FinalTime/Numberofhs;
   double kinetisk_energi,potensiell_energi, total_energi,angular_moment;
-  double time; time =0;
+  double time =0;
   body.r = sqrt(body.xpos*body.xpos + body.ypos*body.ypos);
     body.xpos += h*body.xhas;
     body.ypos += h*body.yhas;
@@ -26,7 +26,7 @@ void euler(CelestialBody& body, double FinalTime, int Numberofhs,string outfilen
     potensiell_energi = -FourPi2*body.masse/(body.r);
     total_energi = kinetisk_energi+potensiell_energi;
     angular_moment = sqrt(pow(body.xpos*body.yhas, 2) + pow(body.ypos*body.xhas, 2));
-
+    time += h;
     output(time, body.xpos, body.ypos, body.xhas, body.yhas,outfilename,kinetisk_energi,potensiell_energi,total_energi,angular_moment);   // write to file
 }
 
@@ -66,14 +66,14 @@ void output(double time, double x, double y, double xhas, double yhas,string out
   ofstream ofile;
   ofile.open(outfilename, ios::app);
   ofile << setiosflags(ios::showpoint | ios::uppercase);
-  ofile << setw(15) << setprecision(8) << time ;
-  ofile << setw(15) << setprecision(8) << x;
-  ofile << setw(15) << setprecision(8) << y;
-  ofile << setw(15) << setprecision(8) << xhas;
-  ofile << setw(15) << setprecision(8) << yhas;
-  ofile << setw(15) << setprecision(8) << kinetisk_energi;
-  ofile << setw(15) << setprecision(8) << potensiell_energi;
-  ofile << setw(15) << setprecision(8) << total_energi;
-  ofile << setw(15) << setprecision(8) << angular_moment
+  ofile << setw(20) << setprecision(8) << time ;
+  ofile << setw(20) << setprecision(8) << x;
+  ofile << setw(20) << setprecision(8) << y;
+  ofile << setw(20) << setprecision(8) << xhas;
+  ofile << setw(20) << setprecision(8) << yhas;
+  ofile << setw(20) << setprecision(8) << kinetisk_energi;
+  ofile << setw(20) << setprecision(8) << potensiell_energi;
+  ofile << setw(20) << setprecision(8) << total_energi;
+  ofile << setw(20) << setprecision(8) << angular_moment
   << endl;
 }
