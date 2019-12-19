@@ -22,10 +22,10 @@ void euler(CelestialBody& body, double FinalTime, int Numberofhs,string outfilen
     body.yhas -= h*FourPi2*body.ypos/(body.r*body.r*body.r);
     body.r = sqrt(body.xpos*body.xpos+body.ypos*body.ypos);
     //energi:
-    kinetisk_energi = 0.5*body.masse*(body.xhas +body.yhas)*(body.xhas+body.yhas);
-    potensiell_energi = -FourPi2*body.masse/(body.r);
+    kinetisk_energi = FourPi2 *0.5*body.masse*(body.xhas +body.yhas)*(body.xhas+body.yhas);
+    potensiell_energi = -FourPi2*FourPi2*body.masse/(body.r);
     total_energi = kinetisk_energi+potensiell_energi;
-    angular_moment = sqrt(pow(body.xpos*body.yhas, 2) + pow(body.ypos*body.xhas, 2));
+    angular_moment += sqrt(pow(body.xpos*body.yhas, 2) + pow(body.ypos*body.xhas, 2));
     time += h;
     output(time, body.xpos, body.ypos, body.xhas, body.yhas,outfilename,kinetisk_energi,potensiell_energi,total_energi,angular_moment);   // write to file
 }
@@ -47,7 +47,7 @@ void velocityVerlet(CelestialBody& body, double FinalTime, int Numberofhs,string
         body.xaks = -((FourPi2*body.xpos) / (pow(body.r, body.beta + 1))) *(1+3*(pow(body.xpos*body.yhas,2) + pow(body.ypos*body.xhas,2)))/(pow(body.r,2)*pow(3e8*60*60*24*365/ 1.496e8, 2));
         body.yaks = -((FourPi2*body.ypos) / (pow(body.r, body.beta + 1))) *(1+3*(pow(body.xpos*body.yhas,2) + pow(body.ypos*body.xhas,2)))/(pow(body.r,2)*pow(3e8*60*60*24*365/ 1.496e8, 2));
     }
-    
+
     body.xhas= body.xhas+(h/2)*body.xaks+(h/2)*nest_xaks;
     body.yhas= body.yhas+(h/2)*body.yaks+(h/2)*nest_yaks;
 
@@ -55,27 +55,27 @@ void velocityVerlet(CelestialBody& body, double FinalTime, int Numberofhs,string
     body.yaks=nest_yaks;
     time +=h;
     //energi:
-    kinetisk_energi = 0.5*body.masse*(body.xhas +body.yhas)*(body.xhas+body.yhas);
-    potensiell_energi = -FourPi2*body.masse/(body.r);
+    kinetisk_energi += FourPi2 *0.5*body.masse*(body.xhas +body.yhas)*(body.xhas+body.yhas);
+    potensiell_energi = - FourPi2*FourPi2*body.masse/(body.r);
     total_energi = kinetisk_energi+potensiell_energi;
-    angular_moment = sqrt(pow(body.xpos*body.yhas, 2) + pow(body.ypos*body.xhas, 2));
+    angular_moment += sqrt(pow(body.xpos*body.yhas, 2) + pow(body.ypos*body.xhas, 2));
     output(time, body.xpos, body.ypos, body.xhas, body.yhas,outfilename,kinetisk_energi,potensiell_energi,total_energi,angular_moment);
 
 }
 void output(double time, double x, double y, double xhas, double yhas,string outfilename,double kinetisk_energi,double potensiell_energi,
   double total_energi,double angular_moment)
 {
-  // ofstream ofile;
-  // ofile.open(outfilename, ios::app);
-  // ofile << setiosflags(ios::showpoint | ios::uppercase);
-  // ofile << setw(20) << setprecision(8) << time ;
-  // ofile << setw(20) << setprecision(8) << x;
-  // ofile << setw(20) << setprecision(8) << y;
-  // ofile << setw(20) << setprecision(8) << xhas;
-  // ofile << setw(20) << setprecision(8) << yhas;
-  // ofile << setw(20) << setprecision(8) << kinetisk_energi;
-  // ofile << setw(20) << setprecision(8) << potensiell_energi;
-  // ofile << setw(20) << setprecision(8) << total_energi;
-  // ofile << setw(20) << setprecision(8) << angular_moment
-  // << endl;
+  ofstream ofile;
+  ofile.open(outfilename, ios::app);
+  ofile << setiosflags(ios::showpoint | ios::uppercase);
+  ofile << setw(20) << setprecision(8) << time ;
+  ofile << setw(20) << setprecision(8) << x;
+  ofile << setw(20) << setprecision(8) << y;
+  ofile << setw(20) << setprecision(8) << xhas;
+  ofile << setw(20) << setprecision(8) << yhas;
+  ofile << setw(20) << setprecision(8) << kinetisk_energi;
+  ofile << setw(20) << setprecision(8) << potensiell_energi;
+  ofile << setw(20) << setprecision(8) << total_energi;
+  ofile << setw(20) << setprecision(8) << angular_moment
+  << endl;
 }

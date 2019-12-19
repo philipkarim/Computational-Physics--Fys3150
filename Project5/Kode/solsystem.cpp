@@ -45,8 +45,8 @@ void solsystem::kalkulering_akselerasjon(vector<CelestialBody>& bodies){
   }
 }
 void solsystem::kjoring_algoritme(CelestialBody& body, string outfilename, double FinalTime, int Numberofhs,bool valg_av_algortime,bool relativitisk_newton){
-  ofstream toFile;
-  toFile.open(outfilename, ios::app);
+  // ofstream toFile;
+  // toFile.open(outfilename, ios::app);
   kalkulering_akselerasjon(bodies);
 	if (valg_av_algortime){
     euler(body, FinalTime, Numberofhs,outfilename);
@@ -55,8 +55,7 @@ void solsystem::kjoring_algoritme(CelestialBody& body, string outfilename, doubl
     //velg 0 for generel og 1 for relativitisk_newton
 		velocityVerlet(body, FinalTime, Numberofhs,outfilename,relativitisk_newton);
 	}
-	toFile << setprecision(8) << fixed << body.xpos << setw(20) << body.ypos << endl;
-
+	// toFile << setprecision(8) << fixed << body.xpos << setw(20) << body.ypos << endl;
 }
 void solsystem::merkur_presesjon (CelestialBody& body, double FinalTime,int Numberofhs,string outfilename){
   ofstream merkur_fil;
