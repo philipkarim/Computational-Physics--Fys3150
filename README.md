@@ -1,4 +1,3 @@
-# Computational Physics at the university of Oslo
-# Authors: Philip Niane and Rohullah Akbari
-# Fys3050
-# Year: 2019
+# Fys3050 - Computational Physics at the university of Oslo
+Authors: Philip Niane and Rohullah Akbari
+Year: 2019
