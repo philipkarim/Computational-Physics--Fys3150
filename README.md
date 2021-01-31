@@ -1,4 +1,4 @@
-# Computational Physics-FYS3050
+# Computational Physics-Fys3050
 ## University of Oslo
 ### Collaborators: Philip Niane and Rohullah Akbari
 
