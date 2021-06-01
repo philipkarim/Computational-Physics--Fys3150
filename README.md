@@ -1,4 +1,4 @@
-# Computational Physics-Fys3050
+# Computational Physics-Fys3150
 ## University of Oslo
 
 This course gives an introduction to several of the most used algorithms from numerical analysis to solve problems in the Sciences. 
